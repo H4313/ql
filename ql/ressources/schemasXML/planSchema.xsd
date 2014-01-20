@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+
+<xs:simpleType name="nonNegativeFloat">
+    <xs:restriction base="xs:float">
+      <xs:minInclusive value="0"/>
+    </xs:restriction>
+</xs:simpleType>
+  
+  
+<xs:complexType name="TronconSortantType">
+	<xs:attribute name="nomRue" type="xs:string" use="required" >
+	</xs:attribute>
+	<xs:attribute name="vitesse"  type="nonNegativeFloat" use="required">
+	</xs:attribute>
+	<xs:attribute name="longueur" type="nonNegativeFloat" use="required">
+	</xs:attribute>
+	<xs:attribute name="destination" type="xs:integer" use="required">
+	</xs:attribute>
+</xs:complexType>
+
+
+  <xs:complexType name="NoeudTypeT">
+	    <xs:sequence>
+	     	<xs:element name="TronconSortant" type="TronconSortantType" maxOccurs="unbounded"/>
+	    </xs:sequence>
+  </xs:complexType>
+
+
+<xs:complexType name="NoeudType">
+	
+<xs:complexContent>
+	
+	<xs:extension base="NoeudTypeT">
+			<xs:attribute name="id" type="xs:integer" use="required"></xs:attribute>
+			<xs:attribute name="x" type="xs:positiveInteger" use="required"></xs:attribute>
+			<xs:attribute name="y" type="xs:positiveInteger" use="required"></xs:attribute>
+	</xs:extension>
+	
+</xs:complexContent>
+
+</xs:complexType>
+
+
+
+<xs:complexType name="ReseauType">
+
+ 	<xs:sequence>
+
+ 		<xs:element name="Noeud" type="NoeudType" maxOccurs="unbounded"></xs:element>
+
+ 	</xs:sequence>
+
+</xs:complexType>
+
+
+<xs:element name="Reseau" type="ReseauType"></xs:element>
+
+
+
+</xs:schema>

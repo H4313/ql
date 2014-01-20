@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+<xs:complexType name="LivraisonType">
+	<xs:attribute name="id" type="xs:nonNegativeInteger" use="required" ></xs:attribute>
+	<xs:attribute name="client"  type="xs:nonNegativeInteger" use="required"></xs:attribute>
+	<xs:attribute name="adresse" type="xs:nonNegativeInteger" use="required"></xs:attribute>
+</xs:complexType>
+
+
+
+<xs:complexType name="LivraisonsType">
+
+	<xs:sequence>
+
+		<xs:element name="Livraison" type="LivraisonType" maxOccurs="unbounded"/>
+
+	</xs:sequence>
+
+</xs:complexType>
+
+
+
+<xs:complexType name="PlageTypeT">
+	
+<xs:sequence>
+	
+	<xs:element name="Livraisons" type="LivraisonsType" maxOccurs="1"></xs:element>
+	
+</xs:sequence>
+
+</xs:complexType>
+
+
+<xs:complexType name="PlageType">
+	
+<xs:complexContent>
+	
+	<xs:extension base="PlageTypeT">
+	
+		<xs:attribute name="heureDebut" type="xs:time"></xs:attribute>
+	
+		<xs:attribute name="heureFin" type="xs:time"></xs:attribute>
+	
+	</xs:extension>
+	
+</xs:complexContent>
+
+</xs:complexType>
+
+
+
+<xs:complexType name="PlagesHorairesType">
+
+	<xs:sequence>
+
+		<xs:element name="Plage" type="PlageType" maxOccurs="unbounded"></xs:element>
+
+	</xs:sequence>
+
+</xs:complexType>
+
+
+<xs:complexType name="JourneeTypeType">
+	
+<xs:sequence>
+	
+	<xs:element name="Entrepot">
+	
+		<xs:complexType>
+	
+			<xs:attribute name="adresse" type="xs:nonNegativeInteger"></xs:attribute>
+	
+		</xs:complexType>
+	
+	</xs:element>
+	
+	<xs:element name="PlagesHoraires" type="PlagesHorairesType" maxOccurs="1"></xs:element>
+	
+</xs:sequence>
+
+</xs:complexType>
+
+
+<xs:element name="JourneeType" type="JourneeTypeType"></xs:element>
+
+
+
+</xs:schema>
