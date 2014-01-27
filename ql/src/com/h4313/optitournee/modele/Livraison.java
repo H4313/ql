@@ -2,7 +2,9 @@
 
 package com.h4313.optitournee.modele;
 import com.h4313.optitournee.outils.GestionCalendar;
+
 import java.util.Calendar;
+import java.util.Random;
 
 
 
@@ -39,7 +41,8 @@ public class Livraison extends NoeudItineraire {
 	 */
 	private EtatLivraison etat;
 
-
+	private double poids;
+	
 	/**
 	 * Constructeur de la classe <code>Livraison</code>
 	 *
@@ -56,9 +59,15 @@ public class Livraison extends NoeudItineraire {
 		this.idClient= new Integer(idClient);
 		this.etat= EtatLivraison.NON_CALCULE;
 		this.heure = null;
-
+		Random randomno = new Random();
+		this.poids = Math.abs(5.0 * randomno.nextGaussian() + 10.0);
 	}
 
+	public double getPoids()
+	{
+		return this.poids;
+	}
+	
 	/**
 	 * Getter de <code>etat</code>
 	 * @return <code>this.etat</code>

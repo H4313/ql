@@ -2,24 +2,16 @@
 <JourneeType>
 <Entrepot adresse="14"/>
 <PlagesHoraires>
-<Plage heureDebut="08:00:00" heureFin="09:30:00">
+<Plage heureDebut="08:00:00" heureFin="23:59:00">
 <Livraisons>
 <Livraison id="1" client="608" adresse="77"/>
 <Livraison id="2" client="690" adresse="22"/>
 <Livraison id="3" client="53" adresse="39"/>
-</Livraisons>
-</Plage>
-<Plage heureDebut="09:30:00" heureFin="11:00:00">
-<Livraisons>
-<Livraison id="1" client="259" adresse="93"/>
-<Livraison id="2" client="921" adresse="37"/>
-<Livraison id="3" client="257" adresse="2"/>
-</Livraisons>
-</Plage>
-<Plage heureDebut="11:00:00" heureFin="12:30:00">
-<Livraisons>
-<Livraison id="1" client="523" adresse="89"/>
-<Livraison id="2" client="363" adresse="7"/>
+<Livraison id="4" client="259" adresse="93"/>
+<Livraison id="5" client="921" adresse="37"/>
+<Livraison id="6" client="257" adresse="2"/>
+<Livraison id="7" client="523" adresse="89"/>
+<Livraison id="8" client="363" adresse="7"/>
 </Livraisons>
 </Plage>
 </PlagesHoraires>

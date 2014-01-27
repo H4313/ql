@@ -11,7 +11,11 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.security.KeyStore.Entry;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -38,7 +42,7 @@ public class ZoneDessin extends JPanel {
 	// Le plan que l'on doit afficher
 	private VuePlan mon_plan;
 	// L'itin�raire que l'on doit afficher sur le plan
-	private VueItineraire mon_itineraire;
+	protected HashMap<Integer, VueItineraire> mes_itineraires;
 
 	// Autorise le zoom
 	private boolean haveZoom = Constantes.AUTORISE_ZOOM;
@@ -89,6 +93,9 @@ public class ZoneDessin extends JPanel {
 	 *            la VueApplication auquel appartient la zone de dessin
 	 */
 	public ZoneDessin(VueApplication mere) {
+		
+		this.mes_itineraires = new HashMap<Integer, VueItineraire>();
+		
 		this.appli_mere = mere;
 
 		this.setFocusable(true);
@@ -121,23 +128,13 @@ public class ZoneDessin extends JPanel {
 
 		});
 
+		/*
 		// Ajout d'un �couteur sur le drag de la souris pour translater plan et
 		// itin�raire
 		this.addMouseMotionListener(new MouseMotionListener() {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-
-				// is_on_drag = true;
-				// if(control_key)
-				// {
-				// current_drag_x = e.getX();
-				// current_drag_y = e.getY();
-				//
-				// .addSelection(n, is_on_itineraire);
-				// repaint();
-				// return;
-				// }
 
 				// Dans le cas ou les translation sont permises...
 				if (haveTranslation) {
@@ -171,8 +168,9 @@ public class ZoneDessin extends JPanel {
 			public void mouseMoved(MouseEvent e) {
 			}
 
-		});
+		});*/
 
+		/*
 		// On place un �couteur sur la roulette de la souris pour impl�menter le
 		// zoom
 		this.addMouseWheelListener(new MouseWheelListener() {
@@ -186,8 +184,13 @@ public class ZoneDessin extends JPanel {
 
 					// on d�termine le sens de la rotation pour savoir
 					// si l'utilisateur zoom ou d�zoom
-					int sng = -e.getWheelRotation()
-							/ Math.abs(e.getWheelRotation());
+					int sng = 0;
+					if(Math.abs(e.getWheelRotation()) != 0)
+					{
+						sng = -e.getWheelRotation() 
+								/ Math.abs(e.getWheelRotation());
+					}
+							
 
 					// On incr�mente ensuite le zoom du plan...
 					if (mon_plan != null) {
@@ -238,13 +241,16 @@ public class ZoneDessin extends JPanel {
 			}
 
 		});
-
+		 */
+		
+		
 		/*
 		 * On place un �couteur sur les cliques de la souris pour :
 		 * ->s�lectionner un noeud ->d�tecter le d�but d'un "drag" lorsque la
 		 * souris est press� ->recentrer le plan lors d'un double clic ->charger
 		 * un plan avec un clic si il n'y a aucun plan
 		 */
+		/*
 		this.addMouseListener(new MouseListener() {
 
 			@Override
@@ -342,6 +348,7 @@ public class ZoneDessin extends JPanel {
 			}
 
 		});
+	*/
 	}
 
 
@@ -349,6 +356,7 @@ public class ZoneDessin extends JPanel {
 	 * Redonne au dessin sa taille initial et le recentre.
 	 */
 	public void dezoomEtRecentre() {
+		/*
 		// On applique deux fois le m�me traitement :
 		// une fois pour l'itin�raire...
 		if (mon_itineraire != null) {
@@ -366,12 +374,16 @@ public class ZoneDessin extends JPanel {
 
 		// ...et on n'oublie pas de repeindre la vue
 		repaint();
+		*/
 	}
 
 	// On surcharge la m�thode paintComponent de JPanel pour dessiner ce qui
 	// nous int�resse
 	public void paintComponent(Graphics g) {
 
+		Set<Map.Entry<Integer, VueItineraire>> setItineraires = this.mes_itineraires.entrySet();
+		VueItineraire mon_itineraire = null;
+		
 		// On augmente d'abord la qualit� du rendu (suppresion de l'aliasing
 		// /ex)
 		Graphics2D g2 = (Graphics2D) g;
@@ -393,17 +405,22 @@ public class ZoneDessin extends JPanel {
 		// 1) Du plan
 		if (mon_plan != null)
 			mon_plan.dessineTousTroncon(g);
-		// 2) De l'itin�raire
-		if (mon_itineraire != null)
-			mon_itineraire.dessineTousTroncon(g);
-		// 3) Du noeud selectionne
-		for (int i = 0; i < size_selection; i++) {
-			if (node_are_on_itineraire.get(i)) {
-				mon_itineraire.dessineTronconDeNoeudSelectionne(
-						selectedNodes.get(i), g);
-			} else {
-				mon_plan.dessineTronconDeNoeudSelectionne(selectedNodes.get(i),
-						g);
+		// 2) Des itin�raires
+		for(Map.Entry<Integer, VueItineraire> entry : setItineraires)
+		{
+			mon_itineraire = entry.getValue();
+			
+			if (mon_itineraire != null)
+				mon_itineraire.dessineTousTroncon(g);
+			// 3) Du noeud selectionne
+			for (int i = 0; i < size_selection; i++) {
+				if (node_are_on_itineraire.get(i)) {
+					mon_itineraire.dessineTronconDeNoeudSelectionne(
+							selectedNodes.get(i), g);
+				} else {
+					mon_plan.dessineTronconDeNoeudSelectionne(selectedNodes.get(i),
+							g);
+				}
 			}
 		}
 
@@ -411,30 +428,35 @@ public class ZoneDessin extends JPanel {
 		// 1) ...Du plan
 		if (mon_plan != null)
 			mon_plan.dessineTousNoeud(g);
-		// 2) ...De l'itin�raire
-		if (mon_itineraire != null) {
-			mon_itineraire.dessineTousNoeud(g);
-		}
-		// 3) ...Destinations du noeud selectionne
-		for (int i = 0; i < size_selection; i++) {
-			if (node_are_on_itineraire.get(i)) {
-				mon_itineraire.dessineDestinationsDeSelection(g,
-						selectedNodes.get(i));
-			} else {
-				mon_plan.dessineDestinationsDeSelection(g, selectedNodes.get(i));
+		// 2) ...Des itin�raires
+		for(Map.Entry<Integer, VueItineraire> entry : setItineraires)
+		{
+			mon_itineraire = entry.getValue();
+			
+			if (mon_itineraire != null) {
+				mon_itineraire.dessineTousNoeud(g);
 			}
-		}
-		// 3') ...de la selection
-		/*
-		 * en dernier, pour eviter que un noeud selectionne ne soit colorier
-		 * dans la couleur d'un noeud destination s'il est lui m�me destination
-		 * d'un autre noeud selectionne
-		 */
-		for (int i = 0; i < size_selection; i++) {
-			if (node_are_on_itineraire.get(i)) {
-				mon_itineraire.dessineNoeudSelectionne(g, selectedNodes.get(i));
-			} else {
-				mon_plan.dessineNoeudSelectionne(g, selectedNodes.get(i));
+			// 3) ...Destinations du noeud selectionne
+			for (int i = 0; i < size_selection; i++) {
+				if (node_are_on_itineraire.get(i)) {
+					mon_itineraire.dessineDestinationsDeSelection(g,
+							selectedNodes.get(i));
+				} else {
+					mon_plan.dessineDestinationsDeSelection(g, selectedNodes.get(i));
+				}
+			}
+			// 3') ...de la selection
+			/*
+			 * en dernier, pour eviter que un noeud selectionne ne soit colorier
+			 * dans la couleur d'un noeud destination s'il est lui m�me destination
+			 * d'un autre noeud selectionne
+			 */
+			for (int i = 0; i < size_selection; i++) {
+				if (node_are_on_itineraire.get(i)) {
+					mon_itineraire.dessineNoeudSelectionne(g, selectedNodes.get(i));
+				} else {
+					mon_plan.dessineNoeudSelectionne(g, selectedNodes.get(i));
+				}
 			}
 		}
 	}
@@ -536,9 +558,22 @@ public class ZoneDessin extends JPanel {
 	 * @param itineraire
 	 *            une instance de VueItineraire
 	 */
-	public void setVueItineraire(VueItineraire itineraire) {
-		this.mon_itineraire = itineraire;
-		mon_itineraire.setZone(this);
+	public void ajouterVueItineraire(VueItineraire vue)
+	{
+//		System.out.println("SetVueItineraire");
+		vue.setZone(this);
+		this.mes_itineraires.put(Integer.valueOf(vue.getItineraireId()), vue);
+	}
+	
+	public void ajouterVuesItineraire(HashMap<Integer, VueItineraire> itineraires) {
+		this.mes_itineraires = itineraires;
+
+		Set<Map.Entry<Integer, VueItineraire>> set = itineraires.entrySet();
+
+		for(Map.Entry<Integer, VueItineraire> entry : set)
+		{
+			(entry.getValue()).setZone(this);
+		}
 	}
 
 	public boolean isRemanent() {
@@ -606,8 +641,10 @@ public class ZoneDessin extends JPanel {
 	/**
 	 * @return la vue de l'itin�raire qui est actuellement affich�e
 	 */
-	public VueItineraire getVueItineraire() {
-		return mon_itineraire;
+	public VueItineraire getVueItineraire(int itineraireId) {
+		System.out.println("id : " + Integer.valueOf(itineraireId));
+		System.out.println(mes_itineraires);
+		return mes_itineraires.get(Integer.valueOf(itineraireId));
 	}
 
 }

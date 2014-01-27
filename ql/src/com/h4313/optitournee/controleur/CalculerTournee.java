@@ -32,7 +32,7 @@ public class CalculerTournee implements Commande {
 	 * @return <code>false</code>
 	 */
 	public boolean annuler() {
-		this.controleur.itineraire.annulerCalcul();
+		//this.controleur.itineraire.annulerCalcul();
 		return false;
 	}
 
@@ -42,8 +42,9 @@ public class CalculerTournee implements Commande {
 	 * @return	<code>true</code> si le calcul a abouti normalement
 	 */
 	public boolean refaire() {
-		int res = this.controleur.itineraire.calculerTournee();
-		return res != 0;
+		//int res = this.controleur.itineraire.calculerTournee();
+		//return res != 0;
+		return true;
 	}
 
 	/**
@@ -52,14 +53,16 @@ public class CalculerTournee implements Commande {
 	 * @return	<code>true</code> si le calcul a abouti normalement
 	 */
 	public boolean faire() {
-		int res = this.controleur.itineraire.calculerTournee();
+		int res = this.controleur.itineraireInitial.calculerTournee();
 
 		if(res == 0){ //Solu opti trouv�e
-			this.controleur.vueAppli.afficherMessageInfo(Constantes.SUCCES_CALCUL);
+//			this.controleur.vueAppli.afficherMessageInfo(Constantes.SUCCES_CALCUL);
+			System.out.println(Constantes.SUCCES_CALCUL);
 			return true;
 		}
 		else if(res == 1){ //Solu non optimal trouv�e
-			this.controleur.vueAppli.afficherMessageAvertissement(Constantes.SOLU_NON_OPTI_CALCUL);
+//			this.controleur.vueAppli.afficherMessageAvertissement(Constantes.SOLU_NON_OPTI_CALCUL);
+			System.out.println(Constantes.SOLU_NON_OPTI_CALCUL);
 			if(this.controleur.vueAppli.demanderCalculPlusLong()){
 				this.controleur.augmenterTempsTSP();
 				this.controleur.calculerTournee();
@@ -70,7 +73,8 @@ public class CalculerTournee implements Commande {
 			}
 		}
 		else if(res == -2){ //Pas de resultat dans le temps
-			this.controleur.vueAppli.afficherMessageErreur(Constantes.ECHEC_CALCUL);
+//			this.controleur.vueAppli.afficherMessageErreur(Constantes.ECHEC_CALCUL);
+			System.out.println(Constantes.ECHEC_CALCUL);
 			if(this.controleur.vueAppli.demanderCalculPlusLong()){
 				this.controleur.augmenterTempsTSP();
 				this.controleur.calculerTournee();
@@ -78,7 +82,8 @@ public class CalculerTournee implements Commande {
 			return false;
 		}
 		else{ //Echec calcul
-			this.controleur.vueAppli.afficherMessageErreur(Constantes.ECHEC_CALCUL);
+//			this.controleur.vueAppli.afficherMessageErreur(Constantes.ECHEC_CALCUL);
+			System.out.println(Constantes.ECHEC_CALCUL);
 			return false;
 		}
 	}

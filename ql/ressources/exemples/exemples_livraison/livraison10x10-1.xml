@@ -2,7 +2,7 @@
 <JourneeType>
 <Entrepot adresse="40"/>
 <PlagesHoraires>
-<Plage heureDebut="08:00:00" heureFin="12:00:00">
+<Plage heureDebut="08:00:00" heureFin="23:59:00">
 <Livraisons>
 <Livraison id="1" client="611" adresse="13"/>
 <Livraison id="2" client="276" adresse="14"/>

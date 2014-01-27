@@ -3,6 +3,8 @@
 package com.h4313.optitournee.controleur;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import com.h4313.optitournee.outils.Pair;
 import com.h4313.optitournee.controleur.parserXML.ParserXML;
@@ -35,7 +37,8 @@ public class Controleur {
 	 *
 	 * @see Itineraire
 	 */
-	protected Itineraire itineraire;
+	protected Itineraire itineraireInitial;
+	protected GestItineraire gestItineraire;
 
 	/**
 	 * L'attribut <code>vueAppli</code> est la vue principale de l'application et c'est avec elle que le controleur
@@ -68,7 +71,7 @@ public class Controleur {
 	private Controleur(){
 		this.historique = new Historique();
 
-		this.itineraire = null;
+		this.gestItineraire = new GestItineraire();
 
 		this.vueAppli = new VueApplication(this);
 
@@ -87,18 +90,23 @@ public class Controleur {
 		try
 		{
 			ParserXML planParser= new ParserXML(adresse, TypeFichier.PLAN);
-			this.itineraire= new Itineraire(planParser.genererPlanDepuisXML());
-			this.itineraire.setEtat(EtatItineraire.ITINERAIRE_NON_CHARGE);
+			this.itineraireInitial= new Itineraire(planParser.genererPlanDepuisXML());
+			this.itineraireInitial.setEtat(EtatItineraire.ITINERAIRE_NON_CHARGE);
 
+			// TEST
+			this.gestItineraire.ajouterItineraire(this.itineraireInitial);
+			// TEST
+			
 			this.historique.viderHistorique();
 
 			this.vueAppli.rafraichir();
-			this.vueAppli.afficherMessageInfo(Constantes.CHARGEMENT_PLAN_REUSSI);
+//			this.vueAppli.afficherMessageInfo(Constantes.CHARGEMENT_PLAN_REUSSI);
 		}
 		catch (XmlParserException e)
 		{
+			e.printStackTrace();
 			//this.vueAppli.afficherMessageErreur(Constantes.CHARGEMENT_PLAN_IMPOSSIBLE);
-			this.vueAppli.afficherMessageErreur(e.getMsgUtilisateur());
+//			this.vueAppli.afficherMessageErreur(e.getMsgUtilisateur());
 			//this.vueAppli.afficherMessageErreur(e.getMsgUtilisateur());
 		}
 		this.vueAppli.afficherCurseurNormal();
@@ -115,9 +123,34 @@ public class Controleur {
 	public void calculerTournee()
 	{
 		this.vueAppli.afficherCurseurAttente();
-		Commande cmd = new CalculerTournee(this);
-		this.historique.faire(cmd);
-
+		
+		/********************/
+		//this.vueAppli.resetDessin();
+		this.gestItineraire.supprimerItineraire(this.itineraireInitial);
+		Plan plan = this.itineraireInitial.getPlan();
+		NoeudItineraire entrepot = this.itineraireInitial.getEntrepot();
+		List<PlageHoraire> plagesHoraireInitiales = this.itineraireInitial.getPlagesHoraire();
+		PlageHoraire plageHoraireInitiale = plagesHoraireInitiales.get(0);
+		
+		List<Livraison> livraisonsInitiales = plageHoraireInitiale.getLivraisons();
+		
+		// Itineraire 1
+		List<Livraison> livraisons1 = new ArrayList<Livraison>();
+		livraisons1.add(livraisonsInitiales.get(0));
+		livraisons1.add(livraisonsInitiales.get(1));
+		PlageHoraire plage1 = new PlageHoraire(plageHoraireInitiale.getHeureDebut(), 
+											plageHoraireInitiale.getHeureFin(), 
+											livraisons1);
+		List<PlageHoraire> plages1 = new ArrayList<PlageHoraire>();
+		plages1.add(plage1);
+		Itineraire itineraire1 = new Itineraire(plan, entrepot, plages1);
+		this.gestItineraire.ajouterItineraire(itineraire1);
+		
+		/********************/
+		
+//		Commande cmd = new CalculerTournee(this);
+//		this.historique.faire(cmd);
+		
 		this.vueAppli.afficherCurseurNormal();
 		this.vueAppli.rafraichir();
 	}
@@ -127,7 +160,7 @@ public class Controleur {
 	 * du <code>TSP</code> si ce dernier est insuffisant.
 	 */
 	public void augmenterTempsTSP(){
-		this.itineraire.augmenterTempsTSP();
+		//this.itineraire.augmenterTempsTSP();
 	}
 
 
@@ -143,25 +176,27 @@ public class Controleur {
 		this.vueAppli.afficherCurseurAttente();
 		try
 		{
-			if (this.itineraire != null)
+			if (this.itineraireInitial != null)
 			{
 				ParserXML livraisonParser= new ParserXML(adresse,TypeFichier.LIVRAISONS);
 
-				Pair<NoeudItineraire,ArrayList<PlageHoraire> > dataLIvr=livraisonParser.genererLivraisonsDepuisXML(this.itineraire.getPlan().getNoeuds());
-				this.itineraire.setPlagesHoraire(dataLIvr.getSecond());
-				this.itineraire.setEntrepot(dataLIvr.getFirst());
-				this.itineraire.setEtat(EtatItineraire.NON_CALCULE);
+				Pair<NoeudItineraire,ArrayList<PlageHoraire> > dataLIvr = 
+						livraisonParser.genererLivraisonsDepuisXML(this.itineraireInitial.getPlan().getNoeuds());
+				this.itineraireInitial.setPlagesHoraire(dataLIvr.getSecond());
+				this.itineraireInitial.setEntrepot(dataLIvr.getFirst());
+				this.itineraireInitial.setEtat(EtatItineraire.NON_CALCULE);
 
 				this.historique.viderHistorique();
 
 				this.vueAppli.rafraichir();
-				this.vueAppli.afficherMessageInfo(Constantes.CHARGEMENT_LIVRAISONS_REUSSI);
+//				this.vueAppli.afficherMessageInfo(Constantes.CHARGEMENT_LIVRAISONS_REUSSI);
 			}
 		}
 		catch (XmlParserException e)
 		{
+			e.printStackTrace();
 			//this.vueAppli.afficherMessageErreur(Constantes.CHARGEMENT_ITINERAIRE_IMPOSSIBLE);
-			this.vueAppli.afficherMessageErreur(e.getMsgUtilisateur());
+//			this.vueAppli.afficherMessageErreur(e.getMsgUtilisateur());
 			//this.vueAppli.afficherMessageErreur(e.getMsgUtilisateur());
 		}
 		this.vueAppli.afficherCurseurNormal();
@@ -172,7 +207,7 @@ public class Controleur {
 	 *
 	 * @param adresseFichier Chemin d'acc�s du fichier de sortie
 	 */
-	public void genererFeuilleDeRoute(String adresseFichier){
+	/*public void genererFeuilleDeRoute(String adresseFichier){
 		this.vueAppli.afficherCurseurAttente();
 		if(adresseFichier != null && !adresseFichier.isEmpty()){
 			String texte = this.itineraire.texteDescription();
@@ -195,14 +230,14 @@ public class Controleur {
 			}
 		}
 		this.vueAppli.afficherCurseurNormal();
-	}
+	}*/
 
 
 	/**
 	 * La m�thode <code>annulerOperation</code> annule si possible la derni�re op�ration r�alis�e par l'utilisateur
 	 *
 	 */
-	public void annulerOperation(){
+	/*public void annulerOperation(){
 		this.vueAppli.afficherCurseurAttente();
 		int retour = this.historique.annulerOperation();
 		if(retour == -1){
@@ -212,13 +247,13 @@ public class Controleur {
 			this.vueAppli.rafraichir();
 		}
 		this.vueAppli.afficherCurseurNormal();
-	}
+	}*/
 
 	/**
 	 * La m�thode <code>refaireOperation</code> refait si possible la derni�re op�ration annul�e par l'utilisateur
 	 *
 	 */
-	public void refaireOperation(){
+	/*public void refaireOperation(){
 		this.vueAppli.afficherCurseurAttente();
 		int retour = this.historique.refaireOperation();
 		if(retour == -1){
@@ -228,15 +263,15 @@ public class Controleur {
 			this.vueAppli.rafraichir();
 		}
 		this.vueAppli.afficherCurseurNormal();
-	}
+	}*/
 
 	/**
 	 * La m�thode <code>annulerPossible</code> v�rifie si une annulation est possible.
 	 * @return <code>true</code> si on peut annuler
 	 */
-	public boolean annulerPossible(){
+	/*public boolean annulerPossible(){
 		return this.historique.annulerPossible();
-	}
+	}*/
 
 	/**
 	 * La m�thode <code>refairePossible</code> v�rifie si une op�ration peut �tre refaite.
@@ -253,7 +288,7 @@ public class Controleur {
 	 * @param noeudPrec noeud du plan o� se trouve la livraison (ou l'entrep�t) qui sera r�alis�e avant.
 	 * La nouvelle livraison aura la m�me plage horaire que cette derni�re.
 	 */
-	public void ajouterLivraison(Noeud noeudSel, Noeud noeudPrec){
+	/*public void ajouterLivraison(Noeud noeudSel, Noeud noeudPrec){
 		if(this.itineraire != null && this.itineraire.testItineraireCharger()){
 			this.vueAppli.afficherCurseurAttente();
 
@@ -270,14 +305,14 @@ public class Controleur {
 
 			this.vueAppli.afficherCurseurNormal();
 		}
-	}
+	}*/
 
 	/**
 	 * la m�thode <code>supprimerLivraison</code> cr�e une commande <code>SupprimerLivraison</code>
 	 *  qui supprime la livraison sur le noeud pass� en param�tre.
 	 * @param noeudSel Noeud sur lequel la livraison sera supprim�e
 	 */
-	public void supprimerLivraison(Noeud noeudSel){
+	/*public void supprimerLivraison(Noeud noeudSel){
 		if(this.itineraire != null && this.itineraire.testItineraireCharger()){
 
 			this.vueAppli.afficherCurseurAttente();
@@ -300,14 +335,19 @@ public class Controleur {
 
 			this.vueAppli.afficherCurseurNormal();
 		}
-	}
+	}*/
 
 	/**
 	 * La m�thode <code>getItineraire</code> est un getter pour obtenir le point d'entr�e du mod�le
 	 * @return l'itin�raire, point d'entr�e du mod�le
 	 */
-	public Itineraire getItineraire() {
-		return itineraire;
+	public Itineraire getItineraireInitial()
+	{
+		return this.itineraireInitial;
+	}
+	
+	public HashMap<Integer, Itineraire> getItineraires() {
+		return gestItineraire.getItineraires();
 	}
 
 

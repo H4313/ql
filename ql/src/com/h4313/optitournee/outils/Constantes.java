@@ -26,10 +26,10 @@ public abstract class Constantes {
 	};
 
 	// Duree d'attente a chaque point de livraison en secondes. 600 = 10 minutes
-	public static final Integer DUREE_ATTENTE_LIVRAISON = 600;
+	public static final Integer DUREE_ATTENTE_LIVRAISON = 0;
 
 	//Temps de calcul du TSP
-	public static final int TEMPS_MAX_TSP_DEFAUT = 150;
+	public static final int TEMPS_MAX_TSP_DEFAUT = 850;
 	public static final int COEF_AUGM_TEMPS_TSP = 2;
 
 	// Parametres de l'interface

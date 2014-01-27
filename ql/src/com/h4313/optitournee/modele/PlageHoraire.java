@@ -129,6 +129,11 @@ public class PlageHoraire {
 		
 	}
 
+	public List<Livraison> getLivraisons()
+	{
+		return livraisons;
+	}
+	
 	/**
 	 * La m�thode <code>estVide</code> v�rifie si la plage horaire est vide
 	 * @return <code>true</code> si la plage horaire est vide, <code>false</code> sinon

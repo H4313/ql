@@ -57,9 +57,13 @@ public class VueItineraire extends VuePlan {
 	private DrawStrategy strategy_livraison = Constantes.STRATEGY_LIVRAISON;
 
 
+	private static int dernierItineraireId = 0;
+	private int itineraireId;
+	
 	public VueItineraire(Itineraire it, int minX, int maxX, int minY, int maxY) {
 
 		super(it != null ? it.getPlan() : null);
+		this.itineraireId = VueItineraire.dernierItineraireId++;
 		this.itineraire = it;
 		this.c_noeud = Constantes.COUL_NOEUD_IT;
 		this.c_troncon = Constantes.COUL_TRONCON_IT;
@@ -69,7 +73,11 @@ public class VueItineraire extends VuePlan {
 		this.setMinMax(minX, maxX, minY, maxY);
 	}
 
-
+	public int getItineraireId()
+	{
+		return this.itineraireId;
+	}
+	
 	public void dessineTousTroncon(Graphics g) {
 		// Si l'itin�raire n'est pas calcule, alors
 		// on sait qu'il ne peut pas y avoir de troncon

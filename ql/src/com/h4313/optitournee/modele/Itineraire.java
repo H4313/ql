@@ -66,6 +66,9 @@ public class Itineraire {
 	 */
 	private Plan plan;
 
+	private static int dernierItineraireId = 0;
+	private int itineraireId;
+	
 	/**
 	 * L'attribut <code>etat</code> est l'�tat du mod�le.
 	 *
@@ -76,10 +79,22 @@ public class Itineraire {
 	/**
 	 * Constructeur de la classe <code>Itineraire</code>
 	 */
-	public Itineraire(){
+	public Itineraire()
+	{
+		this.itineraireId = Itineraire.dernierItineraireId++;
 		this.plagesHoraire = null;
 		this.entrepot = null;
 		this.plan = null;
+		this.idDernierCLient = -1;
+		this.etat = EtatItineraire.PLAN_NON_CHARGE;
+	}
+	
+	public Itineraire(Plan plan, NoeudItineraire entrepot, List<PlageHoraire> plages)
+	{
+		this.itineraireId = Itineraire.dernierItineraireId++;
+		this.plagesHoraire = plages;
+		this.entrepot = entrepot;
+		this.plan = plan;
 		this.idDernierCLient = -1;
 		this.etat = EtatItineraire.PLAN_NON_CHARGE;
 	}
@@ -91,11 +106,17 @@ public class Itineraire {
 	 */
 	public Itineraire(List<Noeud> reseau)
 	{
+		this.itineraireId = Itineraire.dernierItineraireId++;
 		this.plagesHoraire = null;
 		this.entrepot = null;
 		this.plan= new Plan(reseau);
 		this.idDernierCLient = -1;
 		this.etat = EtatItineraire.ITINERAIRE_NON_CHARGE;
+	}
+	
+	public int getItineraireId()
+	{
+		return this.itineraireId;
 	}
 
 	/**
