@@ -8,7 +8,7 @@ public class GestItineraire
 	
 	public GestItineraire()
 	{
-		itineraires = new HashMap<Integer, Itineraire>();
+		this.reset();
 	}
 	
 	public void ajouterItineraire(Itineraire itineraire)
@@ -29,5 +29,10 @@ public class GestItineraire
 	public HashMap<Integer, Itineraire> getItineraires()
 	{
 		return itineraires;
+	}
+	
+	public void reset()
+	{
+		itineraires = new HashMap<Integer, Itineraire>();
 	}
 }

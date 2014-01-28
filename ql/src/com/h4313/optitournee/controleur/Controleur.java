@@ -171,8 +171,9 @@ public class Controleur {
 				this.itineraireInitial.setEntrepot(dataLIvr.getFirst());
 				this.itineraireInitial.setEtat(EtatItineraire.NON_CALCULE);
 
-				/********************/
-				//this.vueAppli.resetDessin();
+				/********* A RENDRE DYNAMIQUE ***********/
+				this.vueAppli.resetDessin();
+				this.gestItineraire.reset();
 				this.gestItineraire.supprimerItineraire(this.itineraireInitial);
 				Plan plan = this.itineraireInitial.getPlan();
 				NoeudItineraire entrepot = this.itineraireInitial.getEntrepot();
@@ -207,7 +208,21 @@ public class Controleur {
 				itineraire2.setEtat(EtatItineraire.NON_CALCULE);
 				this.gestItineraire.ajouterItineraire(itineraire2);
 				
-				/********************/
+
+				// Itineraire 3
+				List<Livraison> livraisons3 = new ArrayList<Livraison>();
+				livraisons3.add(livraisonsInitiales.get(4));
+				livraisons3.add(livraisonsInitiales.get(5));
+				PlageHoraire plage3 = new PlageHoraire(plageHoraireInitiale.getHeureDebut(), 
+													plageHoraireInitiale.getHeureFin(), 
+													livraisons3);
+				List<PlageHoraire> plages3 = new ArrayList<PlageHoraire>();
+				plages3.add(plage3);
+				Itineraire itineraire3 = new Itineraire(plan, entrepot, plages3);
+				itineraire3.setEtat(EtatItineraire.NON_CALCULE);
+				this.gestItineraire.ajouterItineraire(itineraire3);
+				
+				/********** A RENDRE DYNAMIQUE **********/
 				
 				this.historique.viderHistorique();
 
