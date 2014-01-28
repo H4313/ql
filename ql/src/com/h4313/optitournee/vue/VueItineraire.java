@@ -393,7 +393,6 @@ public class VueItineraire extends VuePlan {
 	private void dessineTrajetSansNoeud(NoeudItineraire depart, Graphics g,
 			Color c, HashMap<String, Integer> nb_passages) {
 		// Si l'itin�raire n'est pas calcul�, alors il n'y a pas de troncon
-		System.out.println("calcule : " + calculated);
 		if (!calculated)
 			return;// donc on quitte
 
