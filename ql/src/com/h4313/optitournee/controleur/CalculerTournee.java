@@ -1,5 +1,6 @@
 package com.h4313.optitournee.controleur;
 
+import com.h4313.optitournee.modele.Itineraire;
 import com.h4313.optitournee.outils.Constantes;
 
 
@@ -17,13 +18,15 @@ public class CalculerTournee implements Commande {
 	 * est �x�cut�e et o� le calcul est r�alis�
 	 */
 	private Controleur controleur;
+	private Itineraire itineraire;
 
 	/**
 	 * Constructeur de la commande
 	 * @param contr <code>Controleur</code> de l'application sur lequel la commande est �x�cut�e
 	 */
-	public CalculerTournee(Controleur contr){
+	public CalculerTournee(Controleur contr, Itineraire it){
 		this.controleur = contr;
+		this.itineraire = it;
 	}
 
 	/**
@@ -53,7 +56,7 @@ public class CalculerTournee implements Commande {
 	 * @return	<code>true</code> si le calcul a abouti normalement
 	 */
 	public boolean faire() {
-		int res = this.controleur.itineraireInitial.calculerTournee();
+		int res = this.itineraire.calculerTournee();
 
 		if(res == 0){ //Solu opti trouv�e
 //			this.controleur.vueAppli.afficherMessageInfo(Constantes.SUCCES_CALCUL);

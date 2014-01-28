@@ -98,283 +98,11 @@ public class ZoneDessin extends JPanel {
 		
 		this.appli_mere = mere;
 
-		this.setFocusable(true);
+		this.setFocusable(false);
 
 		// Cr�ation de la bordure
 		this.setBorder(BorderFactory.createLineBorder(c_cadre, larg_paint,
 				cadre_arrondi));
-
-		this.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-					control_key = true;
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-					control_key = false;
-				}
-
-			}
-
-		});
-
-		/*
-		// Ajout d'un �couteur sur le drag de la souris pour translater plan et
-		// itin�raire
-		this.addMouseMotionListener(new MouseMotionListener() {
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-
-				// Dans le cas ou les translation sont permises...
-				if (haveTranslation) {
-
-					if (mon_plan != null) {
-						// On modifie l'offset du plan de la valeur
-						// du d�placement de la souris
-						mon_plan.setOffset_x(current_offset_x
-								+ (e.getX() - debut_drag_x)
-								/ mon_plan.getZoom());
-						mon_plan.setOffset_y(current_offset_y
-								+ (e.getY() - debut_drag_y)
-								/ mon_plan.getZoom());
-					}
-					if (mon_itineraire != null) {
-						// et on fait la m�me chose pour l'itin�raire
-						mon_itineraire.setOffset_x(current_offset_x
-								+ (e.getX() - debut_drag_x)
-								/ mon_plan.getZoom());
-						mon_itineraire.setOffset_y(current_offset_y
-								+ (e.getY() - debut_drag_y)
-								/ mon_plan.getZoom());
-					}
-					repaint();
-				}
-			}
-
-			// non n�cessaire ici, mais demand� par l'interface
-			// MouseMotionListener
-			@Override
-			public void mouseMoved(MouseEvent e) {
-			}
-
-		});*/
-
-		/*
-		// On place un �couteur sur la roulette de la souris pour impl�menter le
-		// zoom
-		this.addMouseWheelListener(new MouseWheelListener() {
-
-			@Override
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				// Si le zoom est autoris�
-				if (haveZoom) {
-
-					float former_zoom = mon_plan.getZoom();
-
-					// on d�termine le sens de la rotation pour savoir
-					// si l'utilisateur zoom ou d�zoom
-					int sng = 0;
-					if(Math.abs(e.getWheelRotation()) != 0)
-					{
-						sng = -e.getWheelRotation() 
-								/ Math.abs(e.getWheelRotation());
-					}
-							
-
-					// On incr�mente ensuite le zoom du plan...
-					if (mon_plan != null) {
-						mon_plan.setZoom(mon_plan.getZoom() + sng * dzoom);
-					}
-					// et de l'itin�raire...
-					if (mon_itineraire != null) {
-						mon_itineraire.setZoom(mon_itineraire.getZoom() + sng
-								* dzoom);
-						// ...de la quantit� dzoom ( multipli� par -1 si d�zoom)
-					}
-
-					// On translate ensuite la vue pour que le point vis� par la
-					// souris
-					// reste � la m�me place m�me avec le zoom
-
-					float zoom = mon_plan.getZoom();
-					float x = e.getX();
-					float y = e.getY();
-					float move_x, move_y, move_x_former, move_y_former;
-
-					// ...On commence par calculer l'ancien vecteur de
-					// translation effectu� par le zoom pr�c�dent
-					move_x_former = (x - x * former_zoom);
-					move_y_former = (y - y * former_zoom);// qui vaut zero si il
-															// n'y a eu aucun
-															// zoom
-
-					// On calcul ensuite le nouveau vecteur de translation
-					// n�cessaire pour recadrer
-					// la vue avec le nouveau zoom
-					move_x = (x - x * zoom);
-					move_y = (y - y * zoom);
-
-					// On applique ensuite au plan une translation du nouveau
-					// vecteur moins l'ancien
-					mon_plan.setOffset_x(mon_plan.getOffset_x() + move_x / zoom
-							- move_x_former / former_zoom);
-					mon_plan.setOffset_y(mon_plan.getOffset_y() + move_y / zoom
-							- move_y_former / former_zoom);
-
-					mon_itineraire.setOffset_x(mon_plan.getOffset_x());
-					mon_itineraire.setOffset_y(mon_plan.getOffset_y());
-
-					// ...et on oublie pas de repeindre la vue
-					repaint();
-				}
-			}
-
-		});
-		 */
-		
-		
-		/*
-		 * On place un �couteur sur les cliques de la souris pour :
-		 * ->s�lectionner un noeud ->d�tecter le d�but d'un "drag" lorsque la
-		 * souris est press� ->recentrer le plan lors d'un double clic ->charger
-		 * un plan avec un clic si il n'y a aucun plan
-		 */
-		/*
-		this.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// Plage le focus sur la zone de dessin
-				requestFocus();
-				Noeud selectedNode = null;
-				boolean node_is_on_itineraire = false;
-				// Dans le cas ou la souris � �t� cliqu�, on regarde d'abord
-				// le nombre de click
-				if (e.getClickCount() == 1) {
-					// S'il y a eu un clic, il peut s'agit :
-
-					// 1) d'une op�ration de s�l�ction
-					if (mon_itineraire != null) {
-						// ...pou une s�l�ction,
-						// on regarde d'abord si le point appartient �
-						// l'itin�raire
-						selectedNode = mon_itineraire.getClicked(e);
-
-						if (selectedNode == null) {
-							// sinon, alors on regarde si le point appartient au
-							// plan
-							if (mon_plan != null)
-								selectedNode = mon_plan.getClicked(e);
-						} else {
-							node_is_on_itineraire = true;
-						}
-					} else {
-						// Dans le cas ou aucun itin�raire n'est affich�,
-						// on regarde directement si le point appartient au plan
-						if (mon_plan != null)
-							selectedNode = mon_plan.getClicked(e);
-						// a note que la fonction getClicked renvoie null si
-						// aucun point n'est
-						// selectionne
-					}
-
-					// On ajoute la selection � la liste des selection
-					addSelection(selectedNode, node_is_on_itineraire);
-
-					// Et pour finir, on previent l'application mere qu'un point
-					// a �t� selectionn�
-					// (ou deselectionn�)
-					appli_mere.appendNode(selectedNodes);
-
-					// 2)D'une action pour charger un plan
-					if (mon_plan.getPlan() == null) {
-						appli_mere.chargerPlan();
-					}
-
-					// ...on oublie pas de repeindre la vue
-					repaint();
-				}
-
-				// ..Si l'utilisateur a click� deux fois, alors il faut
-				// recentrer la vue
-				if (e.getClickCount() == 2) {
-
-					dezoomEtRecentre();
-				}
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// Dans le cas ou un boutton de la souris est press�,
-				// On sauvegarde :
-				debut_drag_x = e.getX();// Les coordonn�es de la souris
-				debut_drag_y = e.getY();
-				current_offset_x = mon_plan.getOffset_x();// Ainsi que l'offset
-															// du plan et de
-															// l'itin�raire
-				current_offset_y = mon_plan.getOffset_y();
-				// qui sont n�cessaire pour l'op�ration de "drag" (voir plus
-				// haut addMouseMotionListener)
-			}
-
-			// non n�cessaire ici, mais demand� par l'interface MouseListener
-			public void mouseReleased(MouseEvent e) {
-				// if(is_on_drag)
-				// {
-				// is_on_drag = false;
-				// repaint();
-				// }
-			}
-
-			// non n�cessaire ici, mais demand� par l'interface MouseListener
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
-			// non n�cessaire ici, mais demand� par l'interface MouseListener
-			public void mouseExited(MouseEvent e) {
-
-			}
-
-		});
-	*/
-	}
-
-
-	/**
-	 * Redonne au dessin sa taille initial et le recentre.
-	 */
-	public void dezoomEtRecentre() {
-		/*
-		// On applique deux fois le m�me traitement :
-		// une fois pour l'itin�raire...
-		if (mon_itineraire != null) {
-			mon_itineraire.setOffset_x(0);
-			mon_itineraire.setOffset_y(0);
-			mon_itineraire.setZoom(1);
-		}
-		// ...et une fois pour le plan
-		if (mon_plan != null) {
-			// l'op�ration consiste � :
-			mon_plan.setOffset_x(0);// remettre les offsets � 0
-			mon_plan.setOffset_y(0);
-			mon_plan.setZoom(1);// et le zoom � 1
-		}
-
-		// ...et on n'oublie pas de repeindre la vue
-		repaint();
-		*/
 	}
 
 	// On surcharge la m�thode paintComponent de JPanel pour dessiner ce qui
@@ -386,16 +114,17 @@ public class ZoneDessin extends JPanel {
 		
 		// On augmente d'abord la qualit� du rendu (suppresion de l'aliasing
 		// /ex)
-		Graphics2D g2 = (Graphics2D) g;
+		Graphics2D g2 = (Graphics2D) g;		
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
 				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
 		// Puis on dessine le fond
+		g.clearRect(0, 0, getWidth(), getHeight());
 		g.setColor(c_back);
 		g.fillRect(0, 0, getWidth(), getHeight());
-
+		
 		// On dessine ensuite les troncons puis les noeuds pour �viter
 		// qu'un troncon ne recouvre un noeud.
 
@@ -463,17 +192,6 @@ public class ZoneDessin extends JPanel {
 
 
 	/**
-	 * remanent a vraie permet de garder tous les noeuds selectionne. remanent a
-	 * faux ne garde que le dernier noeud selectionne (tout les noeuds auparant
-	 * selectionne sont enlever de la liste)
-	 *
-	 * @param remanent
-	 */
-	public void setRemanent(boolean remanent) {
-		this.remanent = remanent;
-	}
-
-	/**
 	 * Deslectionne le "i-�me" noeud selectionn� de la selection courrante La
 	 * methode n'a aucune effet si l'indice i ne correspond pas � un noeud
 	 * selectionne
@@ -533,15 +251,6 @@ public class ZoneDessin extends JPanel {
 	}
 
 	/**
-	 * D�selectionne les points selectionn�s
-	 */
-	public void resetSelection() {
-		appli_mere.appendNode(null);
-		this.selectedNodes.clear();
-		this.node_are_on_itineraire.clear();
-	}
-
-	/**
 	 * Change le plan qui sera affiche
 	 *
 	 * @param p
@@ -565,64 +274,17 @@ public class ZoneDessin extends JPanel {
 		this.mes_itineraires.put(Integer.valueOf(vue.getItineraireId()), vue);
 	}
 	
-	public void ajouterVuesItineraire(HashMap<Integer, VueItineraire> itineraires) {
-		this.mes_itineraires = itineraires;
+//	public void ajouterVuesItineraire(HashMap<Integer, VueItineraire> itineraires) {
+//		this.mes_itineraires = itineraires;
+//
+//		Set<Map.Entry<Integer, VueItineraire>> set = itineraires.entrySet();
+//
+//		for(Map.Entry<Integer, VueItineraire> entry : set)
+//		{
+//			(entry.getValue()).setZone(this);
+//		}
+//	}
 
-		Set<Map.Entry<Integer, VueItineraire>> set = itineraires.entrySet();
-
-		for(Map.Entry<Integer, VueItineraire> entry : set)
-		{
-			(entry.getValue()).setZone(this);
-		}
-	}
-
-	public boolean isRemanent() {
-		return this.remanent;
-	}
-
-	public boolean isControlPressed() {
-		return this.control_key;
-	}
-
-	/**
-	 * @return les pointeurs vers les noeuds selectionnes
-	 */
-	public ArrayList<Noeud> getSelection() {
-		ArrayList<Noeud> res = new ArrayList<Noeud>();
-		int size = selectedNodes.size();
-		for (int i = 0; i < size; i++) {
-			res.add(getSelection(i));
-		}
-		return res;
-	}
-
-	/**
-	 * @return le dernier point selectionne. Renvoie null si aucun point
-	 *         selectionne
-	 */
-	public Noeud getLastSelection() {
-		return getSelection(selectedNodes.size() - 1);
-	}
-
-	/**
-	 * @return le i-�me point selectionne de la selection
-	 */
-	public Noeud getSelection(int i) {
-		Noeud res = (i >= selectedNodes.size() || i < 0) ? null : selectedNodes
-				.get(i);
-		if (res != null) {
-			boolean is_on_itineraire = this.node_are_on_itineraire.get(i);
-			if (is_on_itineraire) {
-				for (Noeud n : mon_plan.getPlan().getNoeuds()) {
-					if (n.equals(res)) {
-						res = n;
-						break;
-					}
-				}
-			}
-		}
-		return res;
-	}
 
 	/**
 	 * @return a taille de la selection
@@ -641,10 +303,10 @@ public class ZoneDessin extends JPanel {
 	/**
 	 * @return la vue de l'itin�raire qui est actuellement affich�e
 	 */
-	public VueItineraire getVueItineraire(int itineraireId) {
-		System.out.println("id : " + Integer.valueOf(itineraireId));
+	public VueItineraire getVueItineraire(int vueitineraireId) {
+		System.out.println("id : " + Integer.valueOf(vueitineraireId));
 		System.out.println(mes_itineraires);
-		return mes_itineraires.get(Integer.valueOf(itineraireId));
+		return mes_itineraires.get(Integer.valueOf(vueitineraireId));
 	}
 
 }

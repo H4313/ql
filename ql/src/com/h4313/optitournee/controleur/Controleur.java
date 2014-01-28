@@ -5,15 +5,15 @@ package com.h4313.optitournee.controleur;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.h4313.optitournee.outils.Pair;
 import com.h4313.optitournee.controleur.parserXML.ParserXML;
 import com.h4313.optitournee.controleur.parserXML.XmlParserException;
 import com.h4313.optitournee.modele.*;
 import com.h4313.optitournee.modele.Itineraire.EtatItineraire;
-import com.h4313.optitournee.outils.Constantes;
 import com.h4313.optitournee.outils.Constantes.TypeFichier;
-import com.h4313.optitournee.outils.EcrireFichierTexte;
 import com.h4313.optitournee.vue.VueApplication;
 
 /**
@@ -37,7 +37,7 @@ public class Controleur {
 	 *
 	 * @see Itineraire
 	 */
-	protected Itineraire itineraireInitial;
+	private Itineraire itineraireInitial;
 	protected GestItineraire gestItineraire;
 
 	/**
@@ -94,6 +94,7 @@ public class Controleur {
 			this.itineraireInitial.setEtat(EtatItineraire.ITINERAIRE_NON_CHARGE);
 
 			// TEST
+			this.vueAppli.setItineraireInitial(itineraireInitial);
 			this.gestItineraire.ajouterItineraire(this.itineraireInitial);
 			// TEST
 			
@@ -124,32 +125,16 @@ public class Controleur {
 	{
 		this.vueAppli.afficherCurseurAttente();
 		
-		/********************/
-		//this.vueAppli.resetDessin();
-		this.gestItineraire.supprimerItineraire(this.itineraireInitial);
-		Plan plan = this.itineraireInitial.getPlan();
-		NoeudItineraire entrepot = this.itineraireInitial.getEntrepot();
-		List<PlageHoraire> plagesHoraireInitiales = this.itineraireInitial.getPlagesHoraire();
-		PlageHoraire plageHoraireInitiale = plagesHoraireInitiales.get(0);
-		
-		List<Livraison> livraisonsInitiales = plageHoraireInitiale.getLivraisons();
-		
-		// Itineraire 1
-		List<Livraison> livraisons1 = new ArrayList<Livraison>();
-		livraisons1.add(livraisonsInitiales.get(0));
-		livraisons1.add(livraisonsInitiales.get(1));
-		PlageHoraire plage1 = new PlageHoraire(plageHoraireInitiale.getHeureDebut(), 
-											plageHoraireInitiale.getHeureFin(), 
-											livraisons1);
-		List<PlageHoraire> plages1 = new ArrayList<PlageHoraire>();
-		plages1.add(plage1);
-		Itineraire itineraire1 = new Itineraire(plan, entrepot, plages1);
-		this.gestItineraire.ajouterItineraire(itineraire1);
-		
-		/********************/
-		
-//		Commande cmd = new CalculerTournee(this);
-//		this.historique.faire(cmd);
+		HashMap<Integer, Itineraire> itineraires = this.gestItineraire.getItineraires();
+		Set<Map.Entry<Integer, Itineraire>> set = itineraires.entrySet();
+
+		for(Map.Entry<Integer, Itineraire> entry : set)
+		{
+			Itineraire itineraire = entry.getValue();
+			
+			Commande cmd = new CalculerTournee(this, itineraire);
+			this.historique.faire(cmd);
+		}
 		
 		this.vueAppli.afficherCurseurNormal();
 		this.vueAppli.rafraichir();
@@ -186,6 +171,44 @@ public class Controleur {
 				this.itineraireInitial.setEntrepot(dataLIvr.getFirst());
 				this.itineraireInitial.setEtat(EtatItineraire.NON_CALCULE);
 
+				/********************/
+				//this.vueAppli.resetDessin();
+				this.gestItineraire.supprimerItineraire(this.itineraireInitial);
+				Plan plan = this.itineraireInitial.getPlan();
+				NoeudItineraire entrepot = this.itineraireInitial.getEntrepot();
+				List<PlageHoraire> plagesHoraireInitiales = this.itineraireInitial.getPlagesHoraire();
+				PlageHoraire plageHoraireInitiale = plagesHoraireInitiales.get(0);
+				
+				List<Livraison> livraisonsInitiales = plageHoraireInitiale.getLivraisons();
+				
+				// Itineraire 1
+				List<Livraison> livraisons1 = new ArrayList<Livraison>();
+				livraisons1.add(livraisonsInitiales.get(0));
+				livraisons1.add(livraisonsInitiales.get(1));
+				PlageHoraire plage1 = new PlageHoraire(plageHoraireInitiale.getHeureDebut(), 
+													plageHoraireInitiale.getHeureFin(), 
+													livraisons1);
+				List<PlageHoraire> plages1 = new ArrayList<PlageHoraire>();
+				plages1.add(plage1);
+				Itineraire itineraire1 = new Itineraire(plan, entrepot, plages1);
+				itineraire1.setEtat(EtatItineraire.NON_CALCULE);
+				this.gestItineraire.ajouterItineraire(itineraire1);
+				
+				// Itineraire 2
+				List<Livraison> livraisons2 = new ArrayList<Livraison>();
+				livraisons2.add(livraisonsInitiales.get(2));
+				livraisons2.add(livraisonsInitiales.get(3));
+				PlageHoraire plage2 = new PlageHoraire(plageHoraireInitiale.getHeureDebut(), 
+													plageHoraireInitiale.getHeureFin(), 
+													livraisons2);
+				List<PlageHoraire> plages2 = new ArrayList<PlageHoraire>();
+				plages2.add(plage2);
+				Itineraire itineraire2 = new Itineraire(plan, entrepot, plages2);
+				itineraire2.setEtat(EtatItineraire.NON_CALCULE);
+				this.gestItineraire.ajouterItineraire(itineraire2);
+				
+				/********************/
+				
 				this.historique.viderHistorique();
 
 				this.vueAppli.rafraichir();
@@ -201,141 +224,6 @@ public class Controleur {
 		}
 		this.vueAppli.afficherCurseurNormal();
 	}
-
-	/**
-	 * La m�thode <code>genererFeuilleDeRoute</code> g�n�re un fichier texte d�crivant la feuille de route pour le livreur
-	 *
-	 * @param adresseFichier Chemin d'acc�s du fichier de sortie
-	 */
-	/*public void genererFeuilleDeRoute(String adresseFichier){
-		this.vueAppli.afficherCurseurAttente();
-		if(adresseFichier != null && !adresseFichier.isEmpty()){
-			String texte = this.itineraire.texteDescription();
-			if( texte == null){
-				this.vueAppli.afficherMessageErreur(Constantes.GENERATION_FDR_IMPOSSIBLE);
-			}
-			else{
-				int res = adresseFichier.indexOf('.');
-				if(res == -1){
-					adresseFichier += '.' + Constantes.EXTENSION_DEFAUT_SORTIE_FEUILLE;
-				}
-
-				if(EcrireFichierTexte.ecrireFichierTexte(adresseFichier, texte) != 0){
-					this.vueAppli.afficherMessageErreur(Constantes.GENERATION_FDR_IMPOSSIBLE);
-					this.vueAppli.afficherMessageInfo(texte);
-				}
-				else{
-					this.vueAppli.afficherMessageInfo(texte);
-				}
-			}
-		}
-		this.vueAppli.afficherCurseurNormal();
-	}*/
-
-
-	/**
-	 * La m�thode <code>annulerOperation</code> annule si possible la derni�re op�ration r�alis�e par l'utilisateur
-	 *
-	 */
-	/*public void annulerOperation(){
-		this.vueAppli.afficherCurseurAttente();
-		int retour = this.historique.annulerOperation();
-		if(retour == -1){
-			this.vueAppli.afficherMessageErreur(Constantes.ANNULER_IMPOSSIBLE);
-		}
-		else{
-			this.vueAppli.rafraichir();
-		}
-		this.vueAppli.afficherCurseurNormal();
-	}*/
-
-	/**
-	 * La m�thode <code>refaireOperation</code> refait si possible la derni�re op�ration annul�e par l'utilisateur
-	 *
-	 */
-	/*public void refaireOperation(){
-		this.vueAppli.afficherCurseurAttente();
-		int retour = this.historique.refaireOperation();
-		if(retour == -1){
-			this.vueAppli.afficherMessageErreur(Constantes.REFAIRE_IMPOSSIBLE);
-		}
-		else{
-			this.vueAppli.rafraichir();
-		}
-		this.vueAppli.afficherCurseurNormal();
-	}*/
-
-	/**
-	 * La m�thode <code>annulerPossible</code> v�rifie si une annulation est possible.
-	 * @return <code>true</code> si on peut annuler
-	 */
-	/*public boolean annulerPossible(){
-		return this.historique.annulerPossible();
-	}*/
-
-	/**
-	 * La m�thode <code>refairePossible</code> v�rifie si une op�ration peut �tre refaite.
-	 * @return <code>true</code> si on peut refaire
-	 */
-	public boolean refairePossible(){
-		return this.historique.refairePossible();
-	}
-
-	/**
-	 * la m�thode <code>ajouterLivraison</code> cr�e une commande <code>AjouterLivraison</code> qui ajoute une livraison
-	 * � celles d�j� charg�es.
-	 * @param noeudSel noeud du plan o� est ajout� la livraison
-	 * @param noeudPrec noeud du plan o� se trouve la livraison (ou l'entrep�t) qui sera r�alis�e avant.
-	 * La nouvelle livraison aura la m�me plage horaire que cette derni�re.
-	 */
-	/*public void ajouterLivraison(Noeud noeudSel, Noeud noeudPrec){
-		if(this.itineraire != null && this.itineraire.testItineraireCharger()){
-			this.vueAppli.afficherCurseurAttente();
-
-			Commande cmdAjout = new AjouterLivraison(this.itineraire, noeudSel, noeudPrec);
-			if(this.historique.faire(cmdAjout)){
-				//ajout r�ussi
-				this.vueAppli.afficherMessageInfo(Constantes.AJOUT_REUSSI);
-			}
-			else{
-				//echec
-				this.vueAppli.afficherMessageInfo(Constantes.AJOUT_ECHEC);
-			}
-			this.vueAppli.rafraichir();
-
-			this.vueAppli.afficherCurseurNormal();
-		}
-	}*/
-
-	/**
-	 * la m�thode <code>supprimerLivraison</code> cr�e une commande <code>SupprimerLivraison</code>
-	 *  qui supprime la livraison sur le noeud pass� en param�tre.
-	 * @param noeudSel Noeud sur lequel la livraison sera supprim�e
-	 */
-	/*public void supprimerLivraison(Noeud noeudSel){
-		if(this.itineraire != null && this.itineraire.testItineraireCharger()){
-
-			this.vueAppli.afficherCurseurAttente();
-
-			if(noeudSel == null){
-				this.vueAppli.afficherMessageInfo(Constantes.AUCUN_NOEUD_SELECT);
-			}
-			else{
-				Commande cmdSuppr = new SupprimerLivraison(this.itineraire, noeudSel);
-				if(this.historique.faire(cmdSuppr)){
-					//supression r�ussi
-					this.vueAppli.afficherMessageInfo(Constantes.SUPPRESSION_REUSSIE);
-				}
-				else{
-					//echec
-					this.vueAppli.afficherMessageInfo(Constantes.SUPPRESSION_ECHEC);
-				}
-				this.vueAppli.rafraichir();
-			}
-
-			this.vueAppli.afficherCurseurNormal();
-		}
-	}*/
 
 	/**
 	 * La m�thode <code>getItineraire</code> est un getter pour obtenir le point d'entr�e du mod�le

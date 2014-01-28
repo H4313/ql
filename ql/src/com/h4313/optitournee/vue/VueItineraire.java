@@ -41,7 +41,7 @@ public class VueItineraire extends VuePlan {
 	 * livraisons) dans la couleur de la plage horaire auquel ils appartiennent
 	 */
 	private boolean color_node_comme_plage = Constantes.COLORIE_NOEUD_COMME_PLAGE;
-	private Color[] couleurs = Constantes.COLORS;
+	private Color[] couleurs;
 
 	// Couleur de l'entrepot
 	private Color c_entrepot = Constantes.COUL_ENTREPOT;
@@ -60,9 +60,11 @@ public class VueItineraire extends VuePlan {
 	private static int dernierItineraireId = 0;
 	private int itineraireId;
 	
-	public VueItineraire(Itineraire it, int minX, int maxX, int minY, int maxY) {
+	public VueItineraire(Itineraire it, int minX, int maxX, int minY, int maxY, Color color) {
 
 		super(it != null ? it.getPlan() : null);
+		couleurs = new Color[1];
+		couleurs[0] = color;
 		this.itineraireId = VueItineraire.dernierItineraireId++;
 		this.itineraire = it;
 		this.c_noeud = Constantes.COUL_NOEUD_IT;
@@ -391,6 +393,7 @@ public class VueItineraire extends VuePlan {
 	private void dessineTrajetSansNoeud(NoeudItineraire depart, Graphics g,
 			Color c, HashMap<String, Integer> nb_passages) {
 		// Si l'itin�raire n'est pas calcul�, alors il n'y a pas de troncon
+		System.out.println("calcule : " + calculated);
 		if (!calculated)
 			return;// donc on quitte
 
@@ -519,9 +522,10 @@ public class VueItineraire extends VuePlan {
 	 */
 	public void setCalculated(boolean calculated) {
 		this.calculated = calculated;
-		if (calculated) {
-			plan = getPlanFromItineraire();
-		}
+//		System.out.println(calculated);
+//		if (calculated) {
+//			plan = getPlanFromItineraire();
+//		}
 	}
 
 	/**
@@ -542,6 +546,9 @@ public class VueItineraire extends VuePlan {
 	 */
 	public void setItineraire(Itineraire it) {
 		itineraire = it;
+	}
+	
+	public void setItineraireInitial(Itineraire it) {
 		plan = (itineraire == null ? null : getPlanFromItineraire());
 	}
 

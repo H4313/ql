@@ -66,7 +66,7 @@ public class VueApplication extends JFrame implements Vue {
 	private JPanel bottom;
 
 	// Informations du header
-	private JImage logo;
+//	private JImage logo;
 	private JLabel titre;
 	private Box boxLogin;
 	private JLabel infosLogin;
@@ -134,9 +134,9 @@ public class VueApplication extends JFrame implements Vue {
 				1 - Constantes.GRAPH_PROPORTION_VERTICAL);
 
 		// Elements de header
-		logo = new JImage(Constantes.PATH_IMAGE_LOGO);
-		logo.setPreferredSize(new Dimension(Constantes.LOGO_X,
-				Constantes.LOGO_Y));
+//		logo = new JImage(Constantes.PATH_IMAGE_LOGO);
+//		logo.setPreferredSize(new Dimension(Constantes.LOGO_X,
+//				Constantes.LOGO_Y));
 
 		titre = new JLabel(Constantes.TITLE);
 		titre.setHorizontalAlignment(SwingConstants.CENTER);
@@ -161,7 +161,6 @@ public class VueApplication extends JFrame implements Vue {
 		boxLogin.add(Box.createHorizontalStrut(Constantes.LOGIN_SEPARATOR_SIZE));
 		boxLogin.add(boutonLogout);
 
-		header.add(logo, BorderLayout.WEST);
 		header.add(titre, BorderLayout.CENTER);
 		header.add(boxLogin, BorderLayout.EAST);
 
@@ -194,73 +193,10 @@ public class VueApplication extends JFrame implements Vue {
 				manager.calculerTournee();
 			}
 		});
-
-		/*
-		ImageIcon undoIcon = new ImageIcon(Constantes.PATH_ICON_UNDO);
-		boutonUndo = new JButton(undoIcon);
-		boutonUndo.setToolTipText(Constantes.TOOL_UNDO);
-		boutonUndo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				annulerOperation();
-			}
-		});
-
-		ImageIcon redoIcon = new ImageIcon(Constantes.PATH_ICON_REDO);
-		boutonRedo = new JButton(redoIcon);
-		boutonRedo.setToolTipText(Constantes.TOOL_REDO);
-		boutonRedo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				refaireOperation();
-			}
-		});
-
-		ImageIcon addIcon = new ImageIcon(Constantes.PATH_ICON_ADD);
-		boutonAjouter = new JButton(addIcon);
-		boutonAjouter.setToolTipText(Constantes.TOOL_ADD);
-		boutonAjouter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ajoutLivraison();
-			}
-		});
-
-		ImageIcon removeIcon = new ImageIcon(Constantes.PATH_ICON_REMOVE);
-		boutonSupprimer = new JButton(removeIcon);
-		boutonSupprimer.setToolTipText(Constantes.TOOL_REMOVE);
-		boutonSupprimer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (mode == Mode.NORMAL) {
-					supprimerLivraison();
-				} else {
-					setModeNormal();
-				}
-			}
-		});
 		
-		ImageIcon printIcon = new ImageIcon(Constantes.PATH_ICON_PRINT);
-		boutonImprimer = new JButton(printIcon);
-		boutonImprimer.setToolTipText(Constantes.TOOL_PRINT);
-		boutonImprimer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OpenChooserDialog gestFichiers = new OpenChooserDialog(
-						Constantes.ADRESSE_DEFAUT_SORTIE_FEUILLE);
-				gestFichiers.setSavingMode(true);
-				gestFichiers.ouvrirFichier();
-				String nomFichier = gestFichiers.getCheminFichier();
-				manager.genererFeuilleDeRoute(nomFichier);
-			}
-		});
-		 */
 		controls.add(boutonChargerPlan);
 		controls.add(boutonChargerLivraisons);
 		controls.add(boutonCalculerItineraire);
-//		controls.addSeparator();
-//		controls.add(boutonUndo);
-//		controls.add(boutonRedo);
-//		controls.addSeparator();
-//		controls.add(boutonAjouter);
-//		controls.add(boutonSupprimer);
-//		controls.addSeparator();
-//		controls.add(boutonImprimer);
 
 		// Elements de center
 		GridBagConstraints cGraph = createBagConstraints(0, 0,
@@ -271,7 +207,7 @@ public class VueApplication extends JFrame implements Vue {
 		zone = new ZoneDessin(this);
 
 		zone.setVuePlan(new VuePlan(null));
-		zone.ajouterVueItineraire(new VueItineraire(null, 0, 0, 0, 0));
+		zone.ajouterVueItineraire(new VueItineraire(null, 0, 0, 0, 0, null));
 
 //		infoSelection = new LabelSelection(manager);
 //		infoSelection.setPreferredSize(new Dimension(Constantes.SELECTION_SIZE,
@@ -362,40 +298,6 @@ public class VueApplication extends JFrame implements Vue {
 
 	}
 
-	protected void setModeAjout() {
-		if (this.mode != Mode.AJOUT) {
-			this.mode = Mode.AJOUT;
-
-			former_remanent = zone.isRemanent();
-			zone.setRemanent(true);
-//			boutonAjouter.setIcon(null);
-//			boutonAjouter.setText(Constantes.TEXTE_VALIDE_AJOUT);
-//			boutonAjouter.setToolTipText(Constantes.TOOL_VALIDE_AJOUT);
-//
-//			boutonSupprimer.setIcon(null);
-//			boutonSupprimer.setText(Constantes.TEXTE_ANNULER_AJOUT);
-//			boutonSupprimer.setToolTipText(Constantes.TOOL_ANNULER_AJOUT);
-		}
-	}
-
-	/*protected void setModeNormal() {
-		if (this.mode != Mode.NORMAL) {
-			this.mode = Mode.NORMAL;
-			this.noeudAAjouter = null;
-
-			zone.setRemanent(former_remanent);
-//			boutonAjouter.setText("");
-			ImageIcon addIcon = new ImageIcon(Constantes.PATH_ICON_ADD);
-//			boutonAjouter.setIcon(addIcon);
-//			boutonAjouter.setToolTipText(Constantes.TOOL_ADD);
-
-			ImageIcon removeIcon = new ImageIcon(Constantes.PATH_ICON_REMOVE);
-//			boutonSupprimer.setIcon(removeIcon);
-//			boutonSupprimer.setText("");
-//			boutonSupprimer.setToolTipText(Constantes.TOOL_REMOVE);
-		}
-	}*/
-
 	protected void fermerApplication() {
 		int reponse = JOptionPane.showConfirmDialog(this,
 				Constantes.TEXTE_FENETRE_QUITTER,
@@ -412,7 +314,7 @@ public class VueApplication extends JFrame implements Vue {
 		String cheminFichier = o.getCheminFichier();
 		if (cheminFichier != null && !cheminFichier.equals("")) {
 			manager.chargerPlan(cheminFichier);
-			zone.dezoomEtRecentre();
+//			zone.dezoomEtRecentre();
 		}
 	}
 
@@ -426,72 +328,22 @@ public class VueApplication extends JFrame implements Vue {
 		}
 	}
 
-	protected void supprimerLivraison() {
-//		Noeud noeudSel = zone.getLastSelection();
-//		manager.supprimerLivraison(noeudSel);
+	public void setItineraireInitial(Itineraire iti)
+	{
+		VueItineraire vi = zone.getVueItineraire(0);
+		vi.setItineraireInitial(iti);
 	}
-
-	/*protected void ajoutLivraison() {
-		Noeud noeudSel = zone.getLastSelection();
-		if (noeudSel == null) {
-			afficherMessageInfo(Constantes.AUCUN_NOEUD_SELECT);
-		} else {
-			if (mode == Mode.NORMAL) {
-
-				if (infoSelection.testNoeudSimple()) {
-					// Noeud vide: possible
-					this.noeudAAjouter = noeudSel;
-					afficherMessageInfo(Constantes.AJOUT_SUITE);
-					setModeAjout();
-				} else {
-					afficherMessageInfo(Constantes.AJOUT_NOEUD_NON_VIDE);
-				}
-			} else if (mode == Mode.AJOUT) {
-				if (infoSelection.testNoeudEntrepot()
-						|| infoSelection.testNoeudLivraison()) {
-					// Noeud pr�c�dent possible
-					manager.ajouterLivraison(this.noeudAAjouter, noeudSel);
-					setModeNormal();
-				} else {
-					afficherMessageInfo(Constantes.AJOUT_NOEUD_EST_VIDE);
-				}
-
-			}
-		}
-	}*/
-
-	protected void annulerOperation() {
-		//manager.annulerOperation();
-	}
-
-	protected void refaireOperation() {
-		//manager.refaireOperation();
-	}
-
-	public void appendNode(ArrayList<Noeud> nodes) {
-		if (mode == Mode.AJOUT) {
-			if (zone.getSelectionSize() == 3) {
-				zone.removeSelection(1);
-			}
-		}
-		//this.getInfoSelection().setNoeud(nodes);
-//		this.getInfoSelection().update();
-	}
-
+	
 	/**
 	 * La m�thode <code>rafraichir</code>
 	 * rafraichit l'affichage de la vue.
 	 *
 	 */
 	public void rafraichir() {
-//		this.setModeNormal();
+		Color[] colors = Constantes.COLORS;
+		int colorInc = 0;
 		boutonChargerLivraisons.setEnabled(false);
 		boutonCalculerItineraire.setEnabled(false);
-//		boutonImprimer.setEnabled(false);
-//		boutonAjouter.setEnabled(false);
-//		boutonSupprimer.setEnabled(false);
-//		boutonRedo.setEnabled(false);
-//		boutonUndo.setEnabled(false);
 
 		HashMap<Integer, Itineraire> itineraires = manager.getItineraires();
 		Set<Map.Entry<Integer, Itineraire>> set = itineraires.entrySet();
@@ -502,10 +354,11 @@ public class VueApplication extends JFrame implements Vue {
 		
 			if (itineraire != null)
 			{
-				zone.ajouterVueItineraire(new VueItineraire(null, 0, 0, 0, 0));
+				VueItineraire vi = new VueItineraire(null, 0, 0, 0, 0, colors[colorInc]);
+				zone.ajouterVueItineraire(vi);
 				
 				VuePlan vp = zone.getVuePlan();
-				VueItineraire vi = zone.getVueItineraire(itineraire.getItineraireId());
+//				VueItineraire vi = zone.getVueItineraire();
 				vi.setCalculated(false);
 				vi.setItineraire(null);
 	
@@ -514,79 +367,20 @@ public class VueApplication extends JFrame implements Vue {
 					boutonChargerLivraisons.setEnabled(true);
 	
 					if (itineraire.testItineraireCharger()) {
-						boutonCalculerItineraire.setEnabled(true);
-	//					boutonAjouter.setEnabled(true);
-	//					boutonSupprimer.setEnabled(true);
-	
-	//					boutonRedo.setEnabled(manager.refairePossible());
-	//					boutonUndo.setEnabled(manager.annulerPossible());
-	
 						vi.setItineraire(itineraire);
+						boutonCalculerItineraire.setEnabled(true);
+						
 						vi.setMinMax(vp.getMinX(), vp.getMaxX(), vp.getMinY(),
 								vp.getMaxY());
 	
 						if (itineraire.testTourneeCalculee()) {
-	//						boutonImprimer.setEnabled(true);
-	
 							vi.setCalculated(true);
 						}
 					}
 				}
 			}
-			zone.resetSelection();
 			zone.repaint();
+			colorInc = (colorInc + 1) % Constantes.NB_COLORS;
 		}
 	}
-
-	/**
-	 * La m�thode <code>afficherMessageInfo</code> affiche une information � l'utilisateur
-	 * dans le cadre en bas (texte noir)
-	 */
-	/*public void afficherMessageInfo(String message) {
-		Document doc = console.getDocument();
-
-		try {
-			doc.insertString(doc.getLength(), message + "\n", null);
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-	}*/
-
-	/**
-	 * La m�thode <code>afficherMessageErreur</code> affiche un message d'erreur �
-	 * l'utilisateur dans le cadre en bas (texte rouge)
-	 */
-	/*public void afficherMessageErreur(String message) {
-		Document doc = console.getDocument();
-
-		try {
-			doc.insertString(doc.getLength(), message + "\n",
-					console.getStyle("Error"));
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-	}*/
-
-	/**
-	 * La m�thode <code>afficherMessageAvertissement</code> affiche un avertissement �
-	 * l'utilisateur dans le cadre en bas (texte orange)
-	 */
-	/*public void afficherMessageAvertissement(String message) {
-		Document doc = console.getDocument();
-
-		try {
-			doc.insertString(doc.getLength(), message + "\n",
-					console.getStyle("Warning"));
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-	}*/
-
-	/**
-	 * @return the infoSelection
-	 */
-//	public LabelSelection getInfoSelection() {
-//		return infoSelection;
-//	}
-
 }
