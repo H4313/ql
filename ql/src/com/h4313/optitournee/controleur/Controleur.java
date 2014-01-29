@@ -171,7 +171,7 @@ public class Controleur {
 				this.itineraireInitial.setEntrepot(dataLIvr.getFirst());
 				this.itineraireInitial.setEtat(EtatItineraire.NON_CALCULE);
 
-				/********* A RENDRE DYNAMIQUE ***********/
+				/********* AJOUT QL ***********/
 				this.vueAppli.resetDessin();
 				this.gestItineraire.reset();
 				this.gestItineraire.supprimerItineraire(this.itineraireInitial);
@@ -182,7 +182,7 @@ public class Controleur {
 				
 				AffectationLivraison.affecter(this.gestItineraire, plan, entrepot, plageHoraireInitiale);
 				
-				/********** A RENDRE DYNAMIQUE **********/
+				/********** AJOUT QL **********/
 				
 				this.historique.viderHistorique();
 
