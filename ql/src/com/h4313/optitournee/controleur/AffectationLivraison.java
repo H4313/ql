@@ -28,7 +28,6 @@ public abstract class AffectationLivraison
 		
 		while(!clustersValides)
 		{
-			System.out.println("TEST "+clusters.size());
 			prochainsClusters.clear();
 			clustersValides = true;
 			for(List<Livraison> cluster : clusters)
@@ -43,8 +42,7 @@ public abstract class AffectationLivraison
 				if(poidsTotal > Constantes.POIDS_STOCK_DRONE_EN_KG
 				   || volumeTotal > Constantes.VOLUME_STOCK_DRONE_EN_L)
 				{
-					System.out.println("COUCOU" + poidsTotal);
-					if(cluster.size() == 1)
+					if(cluster.size() <= 1)
 					{
 						System.out.println("ERREUR");
 					}
@@ -55,13 +53,15 @@ public abstract class AffectationLivraison
 				}
 				else
 				{
-					clustersValides = clustersValides && true;
-					clustersFinaux.add(cluster);
+					if(cluster.size() != 0)
+					{
+						clustersValides = clustersValides && true;
+						clustersFinaux.add(cluster);	
+					}
 				}
 			}
 			clusters = new ArrayList<List<Livraison>>(prochainsClusters);
 		}
-		System.out.println("NB CLUSTERS = "+clustersFinaux.size());
 		
 		for(int i = 0 ; i < clustersFinaux.size() ; i++)
 		{

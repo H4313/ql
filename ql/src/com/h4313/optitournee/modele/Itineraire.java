@@ -93,7 +93,7 @@ public class Itineraire {
 	{
 		this.itineraireId = Itineraire.dernierItineraireId++;
 		this.plagesHoraire = plages;
-		this.entrepot = entrepot;
+		this.entrepot = new NoeudItineraire(entrepot.getAdresse());
 		this.plan = plan;
 		this.idDernierCLient = -1;
 		this.etat = EtatItineraire.PLAN_NON_CHARGE;
@@ -260,7 +260,7 @@ public class Itineraire {
 			//Liens entre entrepot et premiere plage horaire
 			for(Livraison l : plagesHoraire.get(idxProchainePlageHoraireNonVide).getAllLivraison()) {
 				List<Noeud> plusCourtChemin = plan.dijkstra(entrepot.adresse, l.adresse);
-				int distanceMin = 0;
+				int distanceMin = 1;
 				for(int i=0 ; i<plusCourtChemin.size()-1 ; i++) {
 					 distanceMin += Math.round(plusCourtChemin.get(i).getTroncon(plusCourtChemin.get(i+1)).getCoutTroncon());
 				}
@@ -311,7 +311,7 @@ public class Itineraire {
 				for(Livraison l2 : p.getAllLivraison()) {
 					if(!l2.equals(l)) {
 						List<Noeud> plusCourtChemin = plan.dijkstra(l.adresse, l2.adresse);
-						int distanceMin = 0;
+						int distanceMin = 1;
 						for(int j=0 ; j<plusCourtChemin.size()-1 ; j++) {
 							 distanceMin += Math.round(plusCourtChemin.get(j).getTroncon(plusCourtChemin.get(j+1)).getCoutTroncon());
 						}

@@ -29,7 +29,7 @@ public abstract class Constantes {
 	public static final Integer DUREE_ATTENTE_LIVRAISON = 0;
 
 	//Temps de calcul du TSP
-	public static final int TEMPS_MAX_TSP_DEFAUT = 850;
+	public static final int TEMPS_MAX_TSP_DEFAUT = 1000000;
 	public static final int COEF_AUGM_TEMPS_TSP = 2;
 
 	// Parametres de l'interface
