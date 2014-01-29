@@ -71,6 +71,11 @@ public class Livraison extends NoeudItineraire {
 		return this.poids;
 	}
 	
+	public double getVolume()
+	{
+		return this.volume;
+	}
+	
 	/**
 	 * Getter de <code>etat</code>
 	 * @return <code>this.etat</code>
