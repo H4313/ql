@@ -14,7 +14,7 @@ public abstract class Constantes {
 	public static final float COUT_AU_METRE_EN_EURO = (float) 0.01;
 	public static final float AUTONOMIE_DRONE_EN_METRE = (float) 25000.0;
 	public static final float VOLUME_STOCK_DRONE_EN_L = (float) 50.0;
-	public static final float POIDS_STOCK_DRONE_EN_G = (float) 50000.0;
+	public static final float POIDS_STOCK_DRONE_EN_KG = (float) 50.0;
 	
 	
 	/***************/
