@@ -43,6 +43,8 @@ public class Livraison extends NoeudItineraire {
 
 	private double poids;
 	
+	private double volume;
+	
 	/**
 	 * Constructeur de la classe <code>Livraison</code>
 	 *
@@ -60,7 +62,8 @@ public class Livraison extends NoeudItineraire {
 		this.etat= EtatLivraison.NON_CALCULE;
 		this.heure = null;
 		Random randomno = new Random();
-		this.poids = Math.abs(5.0 * randomno.nextGaussian() + 10.0);
+		this.poids = Math.abs(10.0 * randomno.nextGaussian() + 20.0);
+		this.volume = Math.abs(5.0 * randomno.nextGaussian() + this.poids);
 	}
 
 	public double getPoids()
