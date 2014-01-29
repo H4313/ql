@@ -69,7 +69,7 @@ public class VueApplication extends JFrame implements Vue {
 //	private JImage logo;
 	private JLabel titre;
 	private Box boxLogin;
-	private JLabel infosLogin;
+//	private JLabel infosLogin;
 	private JButton boutonLogout;
 
 	// Boutons de la barre des controles
@@ -143,10 +143,10 @@ public class VueApplication extends JFrame implements Vue {
 
 		boxLogin = Box.createHorizontalBox();
 
-		Calendar calendrier = new GregorianCalendar();
+//		Calendar calendrier = new GregorianCalendar();
 
-		infosLogin = new JLabel("<html>" + Constantes.WELCOME + "<br>"
-				+ GestionCalendar.calendarToDateString(calendrier) + "</html>");
+//		infosLogin = new JLabel("<html>" + Constantes.WELCOME + "<br>"
+//				+ GestionCalendar.calendarToDateString(calendrier) + "</html>");
 
 		ImageIcon logoutIcon = new ImageIcon(Constantes.PATH_ICON_LOGOUT);
 		boutonLogout = new JButton(logoutIcon);
@@ -157,7 +157,7 @@ public class VueApplication extends JFrame implements Vue {
 			}
 		});
 
-		boxLogin.add(infosLogin);
+//		boxLogin.add(infosLogin);
 		boxLogin.add(Box.createHorizontalStrut(Constantes.LOGIN_SEPARATOR_SIZE));
 		boxLogin.add(boutonLogout);
 

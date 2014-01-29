@@ -181,7 +181,23 @@ public class Controleur {
 				PlageHoraire plageHoraireInitiale = plagesHoraireInitiales.get(0);
 				
 				AffectationLivraison.affecter(this.gestItineraire, plan, entrepot, plageHoraireInitiale);
-				
+
+				HashMap<Integer, Itineraire> itineraires = this.gestItineraire.getItineraires();
+				Set<Map.Entry<Integer, Itineraire>> set = itineraires.entrySet();
+
+				for(Map.Entry<Integer, Itineraire> entry : set)
+				{
+					Itineraire itineraire = entry.getValue();
+					
+					int i = 0;
+					System.out.println("Itineraire " + itineraire.getItineraireId());
+					for(Livraison liv : itineraire.getPlagesHoraire().get(0).getAllLivraison())
+					{
+						System.out.println("Poids de la livraison " + i + " : " + liv.getPoids());
+						i++;
+					}
+					System.out.println();
+				}
 				/********** AJOUT QL **********/
 				
 				this.historique.viderHistorique();

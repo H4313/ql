@@ -87,8 +87,8 @@ public abstract class Constantes {
 
 
 	// Messages de l'interface
-	public static final String TITLE = "Pr�paration pour le lendemain";
-	public static final String WELCOME = "Bonjour M. Henry";
+	public static final String TITLE = "Tournees des drones";
+	public static final String WELCOME = "";
 
 	// Types de noeuds
 	public static final String TEXT_SIMPLENODE = "Noeud libre";

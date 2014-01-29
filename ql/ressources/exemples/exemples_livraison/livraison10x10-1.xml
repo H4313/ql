@@ -12,14 +12,14 @@
 <Livraison id="6" client="361" adresse="87"/>
 <Livraison id="7" client="678" adresse="42"/>
 <Livraison id="8" client="679" adresse="53"/>
-<Livraison id="9" client="680" adresse="61"/>
+<Livraison id="9" client="679" adresse="61"/>
 <Livraison id="10" client="578" adresse="1"/>
-<Livraison id="11" client="680" adresse="61"/>
-<Livraison id="12" client="681" adresse="61"/>
-<Livraison id="13" client="682" adresse="62"/>
-<Livraison id="14" client="683" adresse="62"/>
-<Livraison id="15" client="684" adresse="62"/>
-<Livraison id="16" client="685" adresse="62"/>
+<Livraison id="11" client="680" adresse="62"/>
+<Livraison id="12" client="681" adresse="63"/>
+<Livraison id="13" client="682" adresse="64"/>
+<Livraison id="14" client="683" adresse="65"/>
+<Livraison id="15" client="684" adresse="66"/>
+<Livraison id="16" client="685" adresse="67"/>
 </Livraisons>
 </Plage>
 </PlagesHoraires>
