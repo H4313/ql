@@ -8,10 +8,12 @@
 <Livraison id="2" client="41" adresse="37"/>
 <Livraison id="3" client="804" adresse="23"/>
 <Livraison id="4" client="838" adresse="88"/>
-<Livraison id="5" client="479" adresse="34"/>
+<Livraison id="5" client="479" adresse="11"/>
 <Livraison id="6" client="361" adresse="87"/>
 <Livraison id="7" client="678" adresse="42"/>
-<Livraison id="8" client="578" adresse="72"/>
+<Livraison id="8" client="679" adresse="53"/>
+<Livraison id="9" client="680" adresse="61"/>
+<Livraison id="10" client="578" adresse="1"/>
 </Livraisons>
 </Plage>
 </PlagesHoraires>
